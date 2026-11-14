@@ -1,0 +1,8 @@
+{
+  "runtime": "0.17.8",
+  "compiler": "Zig 0.14.1 Windows x86-64",
+  "output": "platesync-version.dll",
+  "bytes": 49664,
+  "sha256": "b947c4441cf5031343c50ed395a245a2115cf53167df2f07a088bcb0bd149b86",
+  "installer_release": "FH6 Front Plates 0.01 / Workshop 0.28.6"
+}

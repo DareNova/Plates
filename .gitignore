@@ -1,0 +1,21 @@
+# Build outputs and caches
+*.dll
+*.exe
+*.lib
+*.pdb
+*.obj
+*.pyc
+__pycache__/
+.zig-cache/
+zig-out/
+# Game assets, authoring projects and local install records
+*.zip
+*.modelbin
+*.materialbin
+*.carbin
+*.swatchbin
+*.sqlite
+project.json
+install-state/
+last-install-report.json
+PlateSync/
