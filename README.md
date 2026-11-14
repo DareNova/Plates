@@ -1,12 +1,12 @@
 # PlateSync
 
-PlateSync is the DLL used by **FH6 Front Plates**. It keeps the player's front
+PlateSync is the DLL used by **Front Plates Overhaul**. It keeps the player's front
 number plate placement in sync with the selected bumper, body kit and plate-position
 upgrade. Car-specific placements are read from profiles inside the modded car ZIPs.
 
 ## Installation
 
-Use the FH6 Front Plates car pack and follow its included instructions.
+Use the Front Plates Overhaul car pack and follow its included instructions.
 
 1. Close Forza Horizon 6.
 2. Set up [Multiverse](https://www.nexusmods.com/forzahorizon6/mods/539), or use
