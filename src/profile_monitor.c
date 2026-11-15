@@ -106,6 +106,7 @@ static uintptr_t census(uintptr_t low,uintptr_t high,const PSProfile *p){
  }
  HeapFree(GetProcessHeap(),0,buffer);return !ambiguous&&cursor==high?found:0;
 }
+#include "setup_search.h"
 static void refresh_on_draw(Registration *r,uintptr_t scene,int stage){
  InterlockedExchange(&refresh_stage,stage);
  if(!load_refresh_enabled||r->refresh_failed||InterlockedCompareExchange(&r->refresh_busy,1,0)){InterlockedExchange(&refresh_reason,1);return;}
@@ -181,8 +182,9 @@ static int attach(Stored *s,PlateSyncLog log){
  static const BYTE cache_frame[7]={0x48,0x8d,0xa8,0x18,0xff,0xff,0xff};BYTE frame_actual[18];if(!read_local(base+0x362dd76,frame_actual,7,NULL)||memcmp(frame_actual,cache_frame,7))return -3;
  static const BYTE draw_frame[18]={0x55,0x56,0x57,0x41,0x54,0x41,0x55,0x41,0x56,0x41,0x57,0x48,0x8b,0xec,0x48,0x83,0xec,0x70};if(!read_local(base+0x363766f,frame_actual,18,NULL)||memcmp(frame_actual,draw_frame,18))return -3;
  static const BYTE setup_entry[15]={0x48,0x89,0x5c,0x24,0x10,0x4c,0x89,0x44,0x24,0x18,0x55,0x56,0x57,0x41,0x54};BYTE setup_actual[15];if(!read_local(base+0x3645630,setup_actual,15,NULL)||memcmp(setup_actual,setup_entry,15))return -3;
- if(token<0x4010000)return -2;uintptr_t low=(token&~(uintptr_t)0xfffff)-0x4000000,scene=census(low,low+0x8000000,p),part=0,control=0;
- if(!scene||!PSFindProfilePart(scene,original_vt,(uintptr_t)(shadow+1),p,read_local,NULL,&part,&control))return -2;
+ uintptr_t scene=lookup_scene(token,owner,p,log),part=0,control=0;
+ if(!scene)return lookup.busy?-12:-2;
+ if(!PSFindProfilePart(scene,original_vt,(uintptr_t)(shadow+1),p,read_local,NULL,&part,&control)){lookup.scene=0;return -2;}
  for(LONG i=0;i<InterlockedCompareExchange(&record_count,0,0);i++){
   Registration *r=records+i;
   if(atomic_part(r)!=part)continue;
@@ -241,9 +243,10 @@ void PlateSyncRunRender(HMODULE game,const wchar_t *host,const wchar_t *director
   DWORD foreground=0;GetWindowThreadProcessId(GetForegroundWindow(),&foreground);const int keys[3]={VK_F6,VK_F7,VK_F8};int pressed[3]={0};
   for(unsigned i=0;i<3;i++){BOOL down=(GetAsyncKeyState(keys[i])&0x8000)!=0;pressed[i]=down&&!prior[i]&&foreground==GetCurrentProcessId();prior[i]=down;}if(pressed[2])break;
   uint32_t ordinal=0;uintptr_t owner=0,token=current_resource(&ordinal,&owner);Stored *s=by_ordinal(ordinal);if(!s)token=0;
+  if(lookup.token!=token||lookup.owner!=owner||lookup.profile!=(s?&s->profile:NULL))lookup=(SetupLookup){0};
   int has_part=sweep_registrations(token,owner,ordinal,0);if(!has_part){last_token=0;last_car=0;}
   int due=auto_due(&policy,GetTickCount64(),token,automatic,has_part&&token==last_token&&ordinal==last_car);
-  if(s&&(pressed[0]||due)){
+  if(s&&token&&(pressed[0]||due||lookup.busy)){
    if(!prepared){if(read_local(original_vt-8,shadow,sizeof(shadow),NULL)&&shadow[6]==base+0x352d6f0){original_getter=(Getter)shadow[6];shadow[6]=(uintptr_t)&bridge;prepared=1;}}
    int result=prepared?attach(s,log):-3;
    if(!result){last_token=token;last_car=ordinal;}

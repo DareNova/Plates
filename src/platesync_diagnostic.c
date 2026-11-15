@@ -11,7 +11,7 @@ static HMODULE self_module;
 static volatile LONG status_code;
 static HANDLE log_file=INVALID_HANDLE_VALUE;
 __declspec(dllexport) DWORD WINAPI PlateSyncGetStatus(void){return (DWORD)InterlockedCompareExchange(&status_code,0,0);}
-__declspec(dllexport) DWORD WINAPI PlateSyncDiagnosticVersion(void){return 0x00110008;}
+__declspec(dllexport) DWORD WINAPI PlateSyncDiagnosticVersion(void){return 0x00110009;}
 static void line(const char *format,...){
  char buffer[1600];va_list args;va_start(args,format);int n=vsnprintf(buffer,sizeof(buffer)-3,format,args);va_end(args);
  if(n<0)return;if((size_t)n>sizeof(buffer)-3)n=(int)sizeof(buffer)-3;
@@ -28,7 +28,7 @@ static DWORD WINAPI inspect(LPVOID unused){
  swprintf(path,32768,L"%ls\\PlateSync\\diagnostics",dir);if(!CreateDirectoryW(path,NULL)&&GetLastError()!=ERROR_ALREADY_EXISTS){InterlockedExchange(&status_code,4);return 0;}
  swprintf(path,32768,L"%ls\\PlateSync\\diagnostics\\platesync-%lu-%llu.log",dir,(unsigned long)GetCurrentProcessId(),(unsigned long long)GetTickCount64());
  log_file=CreateFileW(path,GENERIC_WRITE,FILE_SHARE_READ,NULL,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,NULL);if(log_file==INVALID_HANDLE_VALUE){InterlockedExchange(&status_code,4);return 0;}
- SYSTEMTIME utc;GetSystemTime(&utc);line("PlateSync 0.17.8 -- reusable weak-owned instance registrations");
+ SYSTEMTIME utc;GetSystemTime(&utc);line("PlateSync 0.17.9 -- bounded adaptive setup discovery");
  line("utc=%04u-%02u-%02uT%02u:%02u:%02uZ",utc.wYear,utc.wMonth,utc.wDay,utc.wHour,utc.wMinute,utc.wSecond);
  line("scope=embedded_zip_profiles; automatic_instance_callback_NO_CODE_PATCH; no_debugger; no_database_or_profile_writes; no_network");
  DWORD host_len=GetModuleFileNameW(NULL,host,32768);const wchar_t *name=wcsrchr(host,L'\\');name=name?name+1:host;

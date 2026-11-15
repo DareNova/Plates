@@ -1,8 +1,8 @@
 {
-  "runtime": "0.17.8",
+  "runtime": "0.17.9",
   "compiler": "Zig 0.14.1 Windows x86-64",
   "output": "platesync-version.dll",
-  "bytes": 49664,
-  "sha256": "b947c4441cf5031343c50ed395a245a2115cf53167df2f07a088bcb0bd149b86",
-  "installer_release": "FH6 Front Plates 0.01 / Workshop 0.28.6"
+  "bytes": 51200,
+  "sha256": "eceb057de97e7889c8678d88dbc44a8de3ea774572eae9a8332b9f02563742b4",
+  "installer_release": "Front Plates Overhaul / Workshop 0.28.10; installer source unchanged"
 }

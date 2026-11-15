@@ -31,7 +31,7 @@ See [BUILDING.md](BUILDING.md) for build details and the verified DLL hash.
 
 ## Source layout
 
-- `src/` — PlateSync 0.17.8, native tests and the bundled miniz decoder.
+- `src/` — PlateSync 0.17.9, native tests and the bundled miniz decoder.
 - `installer/` — the Windows and portable installer scripts used by the car pack.
   Car patches are supplied separately in the mod download.
 
@@ -40,7 +40,9 @@ See [BUILDING.md](BUILDING.md) for build details and the verified DLL hash.
 Currently validated against one Steam executable build. Other builds, including
 Xbox app/Microsoft Store, are unverified. The DLL checks the executable before
 activating. Automatic syncing follows the player's car; a visual refresh can
-occasionally be delayed after changing cars or parts.
+occasionally be delayed after changing cars or parts. Version 0.17.9 adds cached,
+bounded background discovery for setups that move farther away in memory during
+longer sessions. Existing car profiles remain compatible.
 
 ## Online play
 

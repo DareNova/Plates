@@ -27,10 +27,10 @@ No third-party loader is included in this repository.
 
 ## Verify the output
 
-The working **0.17.8** DLL is **49,664 bytes**, with this SHA-256:
+The working **0.17.9** DLL is **51,200 bytes**, with this SHA-256:
 
 ```text
-b947c4441cf5031343c50ed395a245a2115cf53167df2f07a088bcb0bd149b86
+eceb057de97e7889c8678d88dbc44a8de3ea774572eae9a8332b9f02563742b4
 ```
 
 ```powershell
@@ -59,3 +59,7 @@ The DLL reads compatible car profiles, updates plate-related visual selection
 and writes diagnostics under `PlateSync/diagnostics` in the game folder. It
 requires the supported executable and native-layout checks to pass. Building
 the DLL does not require or launch the game. In-game testing is a separate step.
+
+## Setup search regression
+
+Run `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\src\test-search.ps1 -ZigPath "C:\Tools\Zig-0.14.1\zig.exe"`. This uses synthetic memory only; game files and a running game are not required. It checks distant setups, cache reuse, stale-cache rejection, ambiguous matches and unreadable pages.
